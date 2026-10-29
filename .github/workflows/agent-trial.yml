@@ -11,6 +11,11 @@ permissions:
 
 jobs:
   trial:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/agent-trial.yml@3d82ddfab14cd9f67e3f5ff2c07675c7dc7bf80b
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/agent-trial.yml@da649c036495104a9249fb76bb3048c87eff0069
     with:
-      pipeline-ref: 3d82ddfab14cd9f67e3f5ff2c07675c7dc7bf80b
+      pipeline-ref: da649c036495104a9249fb76bb3048c87eff0069
+    # The token exists only in the `agents` environment, but a reusable
+    # workflow gets an environment secret only when the caller passes it by
+    # name. Only the called job, which runs in that environment, can read it.
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
