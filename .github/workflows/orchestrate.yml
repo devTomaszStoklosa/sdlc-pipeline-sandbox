@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   orchestrate:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@9bdff6f5d950c4a2ac026494642282d6814438f1
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@87606f5c627816a517729b287359530ca83137d7
     # The most that the jobs of the called workflow may use; each job narrows
     # its own token further.
     permissions:
@@ -35,7 +35,7 @@ jobs:
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: 9bdff6f5d950c4a2ac026494642282d6814438f1
+      pipeline-ref: 87606f5c627816a517729b287359530ca83137d7
       app-client-id: ${{ vars.APP_CLIENT_ID }}
       app-id: ${{ vars.APP_ID }}
     secrets:
