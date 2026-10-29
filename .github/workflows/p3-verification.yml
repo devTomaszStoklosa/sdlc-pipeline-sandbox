@@ -1,0 +1,87 @@
+name: P3 verification
+
+# Temporary workflow of the P3 test pull request. It is never merged.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # SEC-8.2: the Claude token is a secret of the agents environment only.
+  token-outside-environment:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check that the token is not visible
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then echo "present"; exit 1; fi
+          echo "absent"
+
+  # Expected to be rejected: the agents environment accepts only main.
+  token-in-environment-outside-main:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: agents
+    steps:
+      - run: echo "The job started outside main."
+
+  # SEC-8.1: the App grants the permissions from plan chapter 10.
+  app-token-role-permissions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+          permission-checks: write
+
+  # OQ-8: the App has no workflows permission, so the token request must fail.
+  app-token-without-workflows:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app
+        continue-on-error: true
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-workflows: write
+      - name: Check that the token was refused
+        env:
+          OUTCOME: ${{ steps.app.outcome }}
+        run: |
+          echo "token request: $OUTCOME"
+          [ "$OUTCOME" = "failure" ]
+
+  # Assumption 7: permission-* inputs narrow the App token.
+  narrowed-app-token:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-issues: read
+      - name: Read issues
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/issues" --jq length
+      - name: Check that writing is refused
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          if gh api -X POST "repos/$GITHUB_REPOSITORY/labels" -f name=p3-probe -f color=ededed; then
+            echo "write accepted"
+            exit 1
+          fi
+          echo "write refused"

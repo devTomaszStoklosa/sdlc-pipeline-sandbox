@@ -53,3 +53,10 @@ describe("cart", () => {
     expect(() => applyDiscount(createCart(), pct)).toThrow(RangeError);
   });
 });
+
+// P3 test pull request: a deliberately failing gate. Never merged.
+describe("p3 failing gate", () => {
+  it("fails on purpose", () => {
+    expect(total(createCart())).toBe(1);
+  });
+});
