@@ -1,0 +1,30 @@
+name: Stop
+
+# Stops a run when a person adds `agent:stop` to its issue or pull request
+# (FR-4.28). It runs outside the orchestrator's queue, cancels the run's
+# workflow run at once and does not read .sdlc-agents.yml (FR-10.4).
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  stop:
+    if: github.event.label.name == 'agent:stop'
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/terminate.yml@477ae75c758c52947713bc648547646b71ab2575
+    # Only the called workflow's cancel job uses `actions: write`.
+    permissions:
+      actions: write
+      contents: read
+      issues: read
+      pull-requests: read
+    with:
+      pipeline-ref: 477ae75c758c52947713bc648547646b71ab2575
+      app-client-id: ${{ vars.APP_CLIENT_ID }}
+      app-id: ${{ vars.APP_ID }}
+    secrets:
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}

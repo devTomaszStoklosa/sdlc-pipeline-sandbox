@@ -1,0 +1,27 @@
+name: Pull request closed
+
+# Ends a run when a person merges or closes its pull request (FR-4.35). The
+# pipeline handles only pull requests of its own run branches in this
+# repository, never ones from forks (FR-4.33).
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  pr-closed:
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/terminate.yml@477ae75c758c52947713bc648547646b71ab2575
+    # Only the called workflow's cancel job uses `actions: write`.
+    permissions:
+      actions: write
+      contents: read
+      issues: read
+      pull-requests: read
+    with:
+      pipeline-ref: 477ae75c758c52947713bc648547646b71ab2575
+      app-client-id: ${{ vars.APP_CLIENT_ID }}
+      app-id: ${{ vars.APP_ID }}
+    secrets:
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
