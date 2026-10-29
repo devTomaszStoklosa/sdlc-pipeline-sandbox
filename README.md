@@ -62,3 +62,17 @@ Ręczny workflow [agent-trial.yml](.github/workflows/agent-trial.yml) uruchamia 
 ## Etykiety
 
 `agent:ready`, `agent:stop`, `plan:approved` i `needs-human` (spec 10).
+
+## Pipeline
+
+Konfiguracja pipeline'u jest w [.sdlc-agents.yml](.sdlc-agents.yml). Cienkie workflow wywołują reusable workflows pipeline'u przypięte do commita (przyrost P4):
+
+- [orchestrate.yml](.github/workflows/orchestrate.yml): przebieg issue sterowany etykietami, komentarzami i wynikami workflow `Gates`;
+- [stop.yml](.github/workflows/stop.yml): zatrzymanie przebiegu etykietą `agent:stop` na issue albo na PR;
+- [pr-closed.yml](.github/workflows/pr-closed.yml): zakończenie przebiegu po zamknięciu albo merge'u jego PR.
+
+Przebieg startuje dodanie `agent:ready` do issue przez osobę z co najmniej uprawnieniem triage. Stan przebiegu pipeline zapisuje w ukrytym komentarzu w issue. Zmianę high-impact człowiek akceptuje etykietą `plan:approved` albo prosi o poprawki komentarzem. Zdjęcie `needs-human` wznawia przebieg, a `agent:stop` go zatrzymuje.
+
+Ręczne uruchomienie workflow Orchestrate z numerem issue startuje przebieg czekający w kolejce, gdy żaden inny nie jest aktywny, albo odzyskuje zdarzenie, które nie dotarło.
+
+W P4 role są zaślepkami bez modelu i bez tokenu Claude Code. Ich zachowanie ustala ukryty blok `<!-- sdlc-stub ... -->` w treści issue, opisany w README pipeline'u. Zaślepka Developera commituje plik w `stub-runs/` i otwiera draft PR.

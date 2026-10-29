@@ -1,0 +1,17 @@
+# Configuration of the multi-agent SDLC pipeline for this repository (spec 10).
+# A run uses the copy of this file from main at its start (FR-10.5). There is
+# no gates section: in the MVP the gates workflow does not read this file and
+# uses the organization baseline (pipeline plan 3.6). Labels and limits are the
+# defaults of the baseline.
+version: 1
+
+# The lint, test and coverage commands are the ones of the gates workflow, so
+# the agent and CI check a change the same way. The hooks append the path of
+# an edited file to the format and lint commands, so the linter also gets
+# `--no-warn-ignored` for files that ESLint does not check.
+commands:
+  install: npm ci
+  test: npm test
+  lint: npm run lint -- --no-warn-ignored
+  format: npx prettier --write --ignore-unknown
+  coverage: npm run coverage
