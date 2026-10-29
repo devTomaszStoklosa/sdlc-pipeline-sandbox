@@ -55,6 +55,10 @@ Trzy rulesety z [.github/rulesets](.github/rulesets), wgrane przez API:
 - **approval:** approval code ownera. Obejść go może tylko administrator przy merge PR.
 - **agent-review:** check `agent-review` wystawiony przez GitHub App pipeline'u. Obejść go może tylko administrator przy merge PR.
 
+## Próbna sesja agenta
+
+Ręczny workflow [agent-trial.yml](.github/workflows/agent-trial.yml) uruchamia na `main` próbną sesję `claude -p` z hookami i sandboxem pipeline'u, przypiętą do commita pipeline'u (przyrost P2). Używa środowiska `agents` z tokenem Claude Code i zużywa limit planu Pro. W logu i podsumowaniu runu są tylko podsumowania sesji, bez transkryptu.
+
 ## Etykiety
 
 `agent:ready`, `agent:stop`, `plan:approved` i `needs-human` (spec 10).

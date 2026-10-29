@@ -1,0 +1,16 @@
+name: Agent trial
+
+# A manual trial agent session with the pipeline hooks and sandbox (pipeline
+# plan, P2). It runs only from main, because only main may use the `agents`
+# environment with the Claude Code token. The pipeline is pinned to a commit.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trial:
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/agent-trial.yml@3d82ddfab14cd9f67e3f5ff2c07675c7dc7bf80b
+    with:
+      pipeline-ref: 3d82ddfab14cd9f67e3f5ff2c07675c7dc7bf80b
