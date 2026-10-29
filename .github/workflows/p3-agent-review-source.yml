@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  SOURCE: github-actions
+  SOURCE: app
 
 jobs:
   publish-agent-review:
