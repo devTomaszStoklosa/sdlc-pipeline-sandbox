@@ -2,8 +2,8 @@ name: Orchestrate
 
 # The pipeline's orchestrator (pipeline plan, P4): labels, comments, finished
 # gates and manual dispatches drive the runs of the issues. The pipeline is
-# pinned to a commit. In P4 the roles are stubs, so no job gets the Claude
-# Code token.
+# pinned to a commit. From P5 on, the Planner runs on Claude Code; the
+# Developer and the Reviewer stay stubs until P6 and P7.
 on:
   issues:
     types: [labeled, unlabeled]
@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   orchestrate:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@87606f5c627816a517729b287359530ca83137d7
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@2892a38bce0dd7f481861ca4290f8f597f5886de
     # The most that the jobs of the called workflow may use; each job narrows
     # its own token further.
     permissions:
@@ -35,8 +35,12 @@ jobs:
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: 87606f5c627816a517729b287359530ca83137d7
+      pipeline-ref: 2892a38bce0dd7f481861ca4290f8f597f5886de
       app-client-id: ${{ vars.APP_CLIENT_ID }}
       app-id: ${{ vars.APP_ID }}
+    # The Claude Code token exists only in the `agents` environment, but a
+    # reusable workflow gets an environment secret only when the caller passes
+    # it by name. Only the role jobs, which run in that environment, read it.
     secrets:
       APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
