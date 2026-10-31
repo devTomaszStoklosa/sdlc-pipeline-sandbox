@@ -55,6 +55,10 @@ export function applyDiscount(cart: Cart, percent: number): Cart {
   return { ...cart, discountPercent: percent };
 }
 
+export function itemCount(cart: Cart): number {
+  return cart.items.reduce((count, item) => count + item.quantity, 0);
+}
+
 export function subtotal(cart: Cart): number {
   return cart.items.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,

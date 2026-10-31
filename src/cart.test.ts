@@ -3,6 +3,7 @@ import {
   addItem,
   applyDiscount,
   createCart,
+  itemCount,
   removeItem,
   subtotal,
   total,
@@ -49,6 +50,22 @@ describe("cart", () => {
     const cart = addItem(createCart(), bread);
 
     expect(() => removeItem(cart, "apple")).toThrow(RangeError);
+  });
+
+  it("counts no pieces in an empty cart", () => {
+    expect(itemCount(createCart())).toBe(0);
+  });
+
+  it("counts the pieces of all items", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(itemCount(cart)).toBe(5);
+  });
+
+  it("counts pieces regardless of the discount", () => {
+    const cart = applyDiscount(addItem(createCart(), apple), 50);
+
+    expect(itemCount(cart)).toBe(4);
   });
 
   it("sums unit prices times quantities", () => {
