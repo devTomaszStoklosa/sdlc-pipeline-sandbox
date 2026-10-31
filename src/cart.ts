@@ -14,11 +14,15 @@ export interface Cart {
   readonly discountPercent: number;
 }
 
+const nameError = "Item name must not be empty.";
 const unitPriceError = "Unit price must be a non-negative integer.";
 const quantityError = "Quantity must be a positive integer.";
 
 // Each field fails with one readable message, whichever check it breaks.
+// The name needs a non-whitespace character; it is not trimmed, so the cart
+// keeps the name as given.
 const cartItemSchema = z.object({
+  name: z.string(nameError).regex(/\S/, nameError),
   unitPrice: z.int(unitPriceError).min(0, unitPriceError),
   quantity: z.int(quantityError).min(1, quantityError),
 });

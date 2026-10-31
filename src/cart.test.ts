@@ -41,6 +41,8 @@ describe("cart", () => {
   });
 
   it.each([
+    ["an empty name", { ...apple, name: "" }],
+    ["a whitespace-only name", { ...apple, name: " \t " }],
     ["a fractional unit price", { ...apple, unitPrice: 1.5 }],
     ["a negative unit price", { ...apple, unitPrice: -1 }],
     ["a fractional quantity", { ...apple, quantity: 0.5 }],
@@ -50,6 +52,7 @@ describe("cart", () => {
   });
 
   it.each([
+    ["Item name must not be empty.", { ...apple, name: "  " }],
     ["Unit price must be a non-negative integer.", { ...apple, unitPrice: -1 }],
     ["Quantity must be a positive integer.", { ...apple, quantity: 0 }],
   ])("explains the rejection: %s", (message, item) => {
