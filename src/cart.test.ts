@@ -3,6 +3,7 @@ import {
   addItem,
   applyDiscount,
   createCart,
+  removeItem,
   subtotal,
   total,
   type CartItem,
@@ -25,6 +26,29 @@ describe("cart", () => {
 
     expect(cart.items).toEqual([apple]);
     expect(empty.items).toEqual([]);
+  });
+
+  it("removes every item with the given name", () => {
+    const cart = addItem(addItem(addItem(createCart(), apple), bread), apple);
+
+    expect(removeItem(cart, "apple").items).toEqual([bread]);
+  });
+
+  it("keeps the discount and the original cart when removing an item", () => {
+    const cart = applyDiscount(
+      addItem(addItem(createCart(), apple), bread),
+      10,
+    );
+    const removed = removeItem(cart, "bread");
+
+    expect(removed.discountPercent).toBe(10);
+    expect(cart.items).toEqual([apple, bread]);
+  });
+
+  it("rejects removing a name that is not in the cart", () => {
+    const cart = addItem(createCart(), bread);
+
+    expect(() => removeItem(cart, "apple")).toThrow(RangeError);
   });
 
   it("sums unit prices times quantities", () => {

@@ -4,7 +4,7 @@ Repozytorium demo [wieloagentowego pipeline'u SDLC](https://github.com/devTomasz
 
 ## Aplikacja
 
-Koszyk zakupowy w [src/cart.ts](src/cart.ts): dodawanie pozycji, suma, rabat procentowy i suma końcowa. Kwoty są liczbami całkowitymi w groszach.
+Koszyk zakupowy w [src/cart.ts](src/cart.ts): dodawanie i usuwanie pozycji, suma, rabat procentowy i suma końcowa. Kwoty są liczbami całkowitymi w groszach.
 
 ## Rozwój
 

@@ -39,6 +39,15 @@ export function addItem(cart: Cart, item: CartItem): Cart {
   return { ...cart, items: [...cart.items, item] };
 }
 
+// Removes every item with the given name, since addItem allows duplicates.
+export function removeItem(cart: Cart, name: string): Cart {
+  const items = cart.items.filter((item) => item.name !== name);
+  if (items.length === cart.items.length) {
+    throw new RangeError(`The cart has no item named "${name}".`);
+  }
+  return { ...cart, items };
+}
+
 export function applyDiscount(cart: Cart, percent: number): Cart {
   if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
     throw new RangeError("Discount must be between 0 and 100 percent.");
