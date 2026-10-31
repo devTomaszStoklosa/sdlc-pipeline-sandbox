@@ -2,8 +2,8 @@ name: Orchestrate
 
 # The pipeline's orchestrator (pipeline plan, P4): labels, comments, finished
 # gates and manual dispatches drive the runs of the issues. The pipeline is
-# pinned to a commit. From P5 on, the Planner runs on Claude Code; the
-# Developer and the Reviewer stay stubs until P6 and P7.
+# pinned to a commit. From P6 on, the Planner and the Developer run on Claude
+# Code; the Reviewer stays a stub until P7.
 on:
   issues:
     types: [labeled, unlabeled]
@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   orchestrate:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@523049296288b0a82833094a97fae56534b1807b
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@90835ecaf8b48d09012e041aabd5dc1d612e9a4d
     # The most that the jobs of the called workflow may use; each job narrows
     # its own token further.
     permissions:
@@ -35,7 +35,7 @@ jobs:
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: 523049296288b0a82833094a97fae56534b1807b
+      pipeline-ref: 90835ecaf8b48d09012e041aabd5dc1d612e9a4d
       app-client-id: ${{ vars.APP_CLIENT_ID }}
       app-id: ${{ vars.APP_ID }}
     # The Claude Code token exists only in the `agents` environment, but a
