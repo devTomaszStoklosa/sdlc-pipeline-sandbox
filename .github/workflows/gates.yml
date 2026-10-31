@@ -145,13 +145,13 @@ jobs:
   # token needs no more than read access.
   scope:
     if: github.event_name == 'pull_request'
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/scope-gate.yml@753211bea2eac85fc3a00443b73ed610d32514bf
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/scope-gate.yml@d7b7168014a301aef54925fbfb96961a5667ac25
     permissions:
       contents: read
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: 753211bea2eac85fc3a00443b73ed610d32514bf
+      pipeline-ref: d7b7168014a301aef54925fbfb96961a5667ac25
       app-id: ${{ vars.APP_ID }}
 
   # QG-7.4
