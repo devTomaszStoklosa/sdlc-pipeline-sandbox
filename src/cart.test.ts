@@ -49,6 +49,13 @@ describe("cart", () => {
     expect(() => addItem(createCart(), item)).toThrow(RangeError);
   });
 
+  it.each([
+    ["Unit price must be a non-negative integer.", { ...apple, unitPrice: -1 }],
+    ["Quantity must be a positive integer.", { ...apple, quantity: 0 }],
+  ])("explains the rejection: %s", (message, item) => {
+    expect(() => addItem(createCart(), item)).toThrow(message);
+  });
+
   it.each([-1, 101, Number.NaN])("rejects a discount of %d percent", (pct) => {
     expect(() => applyDiscount(createCart(), pct)).toThrow(RangeError);
   });
