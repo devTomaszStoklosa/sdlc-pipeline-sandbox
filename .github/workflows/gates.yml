@@ -140,6 +140,20 @@ jobs:
       - uses: ./.github/actions/setup
       - run: npx commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
 
+  # QG-7.9: every file that a run's pull request changes is in its plan. The
+  # job of the pipeline's reusable workflow reads only public data, so its
+  # token needs no more than read access.
+  scope:
+    if: github.event_name == 'pull_request'
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/scope-gate.yml@90835ecaf8b48d09012e041aabd5dc1d612e9a4d
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    with:
+      pipeline-ref: 90835ecaf8b48d09012e041aabd5dc1d612e9a4d
+      app-id: ${{ vars.APP_ID }}
+
   # QG-7.4
   dependency-review:
     if: github.event_name == 'pull_request'
