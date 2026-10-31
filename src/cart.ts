@@ -1,6 +1,8 @@
 // Shopping cart. Amounts are integers in minor currency units (e.g. grosze),
 // so totals never suffer from floating-point rounding.
 
+import { z } from "zod";
+
 export interface CartItem {
   readonly name: string;
   readonly unitPrice: number;
@@ -12,18 +14,38 @@ export interface Cart {
   readonly discountPercent: number;
 }
 
+const nameError = "Item name must not be empty.";
+const unitPriceError = "Unit price must be a non-negative integer.";
+const quantityError = "Quantity must be a positive integer.";
+
+// Each field fails with one readable message, whichever check it breaks.
+// The name needs a non-whitespace character; it is not trimmed, so the cart
+// keeps the name as given.
+const cartItemSchema = z.object({
+  name: z.string(nameError).regex(/\S/, nameError),
+  unitPrice: z.int(unitPriceError).min(0, unitPriceError),
+  quantity: z.int(quantityError).min(1, quantityError),
+});
+
 export function createCart(): Cart {
   return { items: [], discountPercent: 0 };
 }
 
 export function addItem(cart: Cart, item: CartItem): Cart {
-  if (!Number.isInteger(item.unitPrice) || item.unitPrice < 0) {
-    throw new RangeError("Unit price must be a non-negative integer.");
-  }
-  if (!Number.isInteger(item.quantity) || item.quantity < 1) {
-    throw new RangeError("Quantity must be a positive integer.");
+  const result = cartItemSchema.safeParse(item);
+  if (!result.success) {
+    throw new RangeError(result.error.issues[0]?.message);
   }
   return { ...cart, items: [...cart.items, item] };
+}
+
+// Removes every item with the given name, since addItem allows duplicates.
+export function removeItem(cart: Cart, name: string): Cart {
+  const items = cart.items.filter((item) => item.name !== name);
+  if (items.length === cart.items.length) {
+    throw new RangeError(`The cart has no item named "${name}".`);
+  }
+  return { ...cart, items };
 }
 
 export function applyDiscount(cart: Cart, percent: number): Cart {
@@ -31,6 +53,10 @@ export function applyDiscount(cart: Cart, percent: number): Cart {
     throw new RangeError("Discount must be between 0 and 100 percent.");
   }
   return { ...cart, discountPercent: percent };
+}
+
+export function itemCount(cart: Cart): number {
+  return cart.items.reduce((count, item) => count + item.quantity, 0);
 }
 
 export function subtotal(cart: Cart): number {
