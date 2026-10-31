@@ -40,6 +40,10 @@ export function subtotal(cart: Cart): number {
   );
 }
 
+export function itemCount(cart: Cart): number {
+  return cart.items.reduce((sum, item) => sum + item.quantity, 0);
+}
+
 export function total(cart: Cart): number {
   const amount = subtotal(cart);
   return amount - Math.round((amount * cart.discountPercent) / 100);

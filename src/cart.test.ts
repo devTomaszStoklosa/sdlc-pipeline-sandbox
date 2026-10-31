@@ -3,6 +3,7 @@ import {
   addItem,
   applyDiscount,
   createCart,
+  itemCount,
   subtotal,
   total,
   type CartItem,
@@ -38,6 +39,22 @@ describe("cart", () => {
     const cart = applyDiscount(addItem(createCart(), bread), 15);
 
     expect(total(cart)).toBe(679);
+  });
+
+  it("counts zero items in an empty cart", () => {
+    expect(itemCount(createCart())).toBe(0);
+  });
+
+  it("sums the quantities of all items", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(itemCount(cart)).toBe(5);
+  });
+
+  it("ignores the discount when counting items", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(itemCount(applyDiscount(cart, 20))).toBe(itemCount(cart));
   });
 
   it.each([
