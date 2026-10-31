@@ -3,6 +3,7 @@ import {
   addItem,
   applyDiscount,
   createCart,
+  itemCount,
   subtotal,
   total,
   type CartItem,
@@ -51,5 +52,21 @@ describe("cart", () => {
 
   it.each([-1, 101, Number.NaN])("rejects a discount of %d percent", (pct) => {
     expect(() => applyDiscount(createCart(), pct)).toThrow(RangeError);
+  });
+
+  it("counts the total quantity of all items", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(itemCount(cart)).toBe(5);
+  });
+
+  it("counts zero items in an empty cart", () => {
+    expect(itemCount(createCart())).toBe(0);
+  });
+
+  it("does not let a discount change the item count", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(itemCount(applyDiscount(cart, 15))).toBe(itemCount(cart));
   });
 });
