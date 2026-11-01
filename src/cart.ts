@@ -70,3 +70,16 @@ export function total(cart: Cart): number {
   const amount = subtotal(cart);
   return amount - Math.round((amount * cart.discountPercent) / 100);
 }
+
+export function averagePiecePrice(cart: Cart): number {
+  const pieces = cart.items.reduce((count, item) => count + item.quantity, 0);
+  if (pieces === 0) {
+    throw new RangeError("An empty cart has no average piece price.");
+  }
+  const amount = cart.items.reduce(
+    (sum, item) => sum + item.unitPrice * item.quantity,
+    0,
+  );
+  const discounted = amount - Math.round((amount * cart.discountPercent) / 100);
+  return Math.round(discounted / pieces);
+}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   addItem,
   applyDiscount,
+  averagePiecePrice,
   createCart,
   itemCount,
   removeItem,
@@ -102,5 +103,32 @@ describe("cart", () => {
 
   it.each([-1, 101, Number.NaN])("rejects a discount of %d percent", (pct) => {
     expect(() => applyDiscount(createCart(), pct)).toThrow(RangeError);
+  });
+
+  describe("averagePiecePrice", () => {
+    it("rejects an empty cart", () => {
+      expect(() => averagePiecePrice(createCart())).toThrow(RangeError);
+    });
+
+    it("divides the amount by the number of pieces", () => {
+      const cart = addItem(addItem(createCart(), apple), bread);
+
+      expect(averagePiecePrice(cart)).toBe(280);
+    });
+
+    it("uses the amount after the discount", () => {
+      const cart = applyDiscount(addItem(createCart(), bread), 15);
+
+      expect(averagePiecePrice(cart)).toBe(679);
+    });
+
+    it("rounds half up to whole grosze", () => {
+      const cart = addItem(
+        addItem(createCart(), { name: "a", unitPrice: 2, quantity: 1 }),
+        { name: "b", unitPrice: 3, quantity: 1 },
+      );
+
+      expect(averagePiecePrice(cart)).toBe(3);
+    });
   });
 });
