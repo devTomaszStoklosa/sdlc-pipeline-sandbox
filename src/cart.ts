@@ -48,6 +48,11 @@ export function removeItem(cart: Cart, name: string): Cart {
   return { ...cart, items };
 }
 
+// Names are compared case-sensitively, like in removeItem.
+export function hasItem(cart: Cart, name: string): boolean {
+  return cart.items.some((item) => item.name === name);
+}
+
 export function applyDiscount(cart: Cart, percent: number): Cart {
   if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
     throw new RangeError("Discount must be between 0 and 100 percent.");

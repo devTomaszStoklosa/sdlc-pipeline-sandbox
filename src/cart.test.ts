@@ -3,6 +3,7 @@ import {
   addItem,
   applyDiscount,
   createCart,
+  hasItem,
   itemCount,
   mostExpensiveItem,
   removeItem,
@@ -51,6 +52,34 @@ describe("cart", () => {
     const cart = addItem(createCart(), bread);
 
     expect(() => removeItem(cart, "apple")).toThrow(RangeError);
+  });
+
+  it("finds an item that is in the cart", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(hasItem(cart, "bread")).toBe(true);
+  });
+
+  it("does not find an item that is not in the cart", () => {
+    const cart = addItem(createCart(), bread);
+
+    expect(hasItem(cart, "apple")).toBe(false);
+  });
+
+  it("does not find any item in an empty cart", () => {
+    expect(hasItem(createCart(), "apple")).toBe(false);
+  });
+
+  it("finds a name that appears more than once", () => {
+    const cart = addItem(addItem(createCart(), apple), apple);
+
+    expect(hasItem(cart, "apple")).toBe(true);
+  });
+
+  it("compares names case-sensitively", () => {
+    const cart = addItem(createCart(), apple);
+
+    expect(hasItem(cart, "Apple")).toBe(false);
   });
 
   it("counts no pieces in an empty cart", () => {
