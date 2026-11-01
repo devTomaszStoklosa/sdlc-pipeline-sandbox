@@ -8,9 +8,14 @@ version: 1
 # The lint, test and coverage commands are the ones of the gates workflow, so
 # the agent and CI check a change the same way. The hooks append the path of
 # an edited file to the format and lint commands, so the linter also gets
-# `--no-warn-ignored` for files that ESLint does not check.
+# `--no-warn-ignored` for files that ESLint does not check. After the
+# Developer writes a dependency manifest of an approved plan, a hook runs
+# update_lockfile, so the lockfile in the commit matches the manifest. It runs
+# no install scripts, because the session may name another package than the
+# plan does.
 commands:
   install: npm ci
+  update_lockfile: npm install --ignore-scripts
   test: npm test
   lint: npm run lint -- --no-warn-ignored
   format: npx prettier --write --ignore-unknown
