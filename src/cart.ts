@@ -59,6 +59,15 @@ export function itemCount(cart: Cart): number {
   return cart.items.reduce((count, item) => count + item.quantity, 0);
 }
 
+// Returns the first item with the highest unit price, or undefined when empty.
+export function mostExpensiveItem(cart: Cart): CartItem | undefined {
+  return cart.items.reduce<CartItem | undefined>(
+    (best, item) =>
+      best === undefined || item.unitPrice > best.unitPrice ? item : best,
+    undefined,
+  );
+}
+
 export function subtotal(cart: Cart): number {
   return cart.items.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,

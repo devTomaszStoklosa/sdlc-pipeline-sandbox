@@ -4,6 +4,7 @@ import {
   applyDiscount,
   createCart,
   itemCount,
+  mostExpensiveItem,
   removeItem,
   subtotal,
   total,
@@ -66,6 +67,23 @@ describe("cart", () => {
     const cart = applyDiscount(addItem(createCart(), apple), 50);
 
     expect(itemCount(cart)).toBe(4);
+  });
+
+  it("finds the item with the highest unit price", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(mostExpensiveItem(cart)).toBe(bread);
+  });
+
+  it("returns the first item when the highest unit price is tied", () => {
+    const twin: CartItem = { ...bread, name: "twin" };
+    const cart = addItem(addItem(addItem(createCart(), apple), bread), twin);
+
+    expect(mostExpensiveItem(cart)).toBe(bread);
+  });
+
+  it("returns undefined for the most expensive item of an empty cart", () => {
+    expect(mostExpensiveItem(createCart())).toBeUndefined();
   });
 
   it("sums unit prices times quantities", () => {
