@@ -68,11 +68,23 @@ export function mostExpensiveItem(cart: Cart): CartItem | undefined {
   );
 }
 
+// Prices and quantities are non-negative, so the running sum never shrinks and
+// an unsafe value is caught as soon as it appears.
 export function subtotal(cart: Cart): number {
-  return cart.items.reduce(
-    (sum, item) => sum + item.unitPrice * item.quantity,
-    0,
-  );
+  let sum = 0;
+  for (const item of cart.items) {
+    const line = item.unitPrice * item.quantity;
+    if (!Number.isSafeInteger(line)) {
+      throw new RangeError(
+        `The amount for item "${item.name}" exceeds the safe integer range.`,
+      );
+    }
+    sum += line;
+    if (!Number.isSafeInteger(sum)) {
+      throw new RangeError("The cart subtotal exceeds the safe integer range.");
+    }
+  }
+  return sum;
 }
 
 export function total(cart: Cart): number {

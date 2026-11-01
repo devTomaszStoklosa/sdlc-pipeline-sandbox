@@ -93,6 +93,42 @@ describe("cart", () => {
     expect(total(cart)).toBe(1399);
   });
 
+  it("accepts a subtotal equal to Number.MAX_SAFE_INTEGER", () => {
+    const cart = addItem(createCart(), {
+      name: "a",
+      unitPrice: Number.MAX_SAFE_INTEGER,
+      quantity: 1,
+    });
+
+    expect(subtotal(cart)).toBe(Number.MAX_SAFE_INTEGER);
+  });
+
+  it("rejects a subtotal whose item amount exceeds the safe range", () => {
+    const cart = addItem(createCart(), {
+      name: "a",
+      unitPrice: Number.MAX_SAFE_INTEGER,
+      quantity: 2,
+    });
+
+    expect(() => subtotal(cart)).toThrow(RangeError);
+    expect(() => subtotal(cart)).toThrow(/item "a"/);
+    expect(() => total(cart)).toThrow(RangeError);
+  });
+
+  it("rejects a subtotal whose sum exceeds the safe range", () => {
+    let cart = createCart();
+    cart = addItem(cart, {
+      name: "a",
+      unitPrice: Number.MAX_SAFE_INTEGER,
+      quantity: 1,
+    });
+    cart = addItem(cart, { name: "b", unitPrice: 2, quantity: 1 });
+
+    expect(() => subtotal(cart)).toThrow(RangeError);
+    expect(() => subtotal(cart)).toThrow(/subtotal exceeds/);
+    expect(() => total(cart)).toThrow(RangeError);
+  });
+
   it("applies a percentage discount rounded to the nearest unit", () => {
     const cart = applyDiscount(addItem(createCart(), bread), 15);
 
