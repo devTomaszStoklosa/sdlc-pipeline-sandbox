@@ -93,6 +93,46 @@ describe("cart", () => {
     expect(total(cart)).toBe(1399);
   });
 
+  it("rejects a subtotal when an item's price times quantity is unsafe", () => {
+    const cart = addItem(createCart(), {
+      name: "a",
+      unitPrice: Number.MAX_SAFE_INTEGER,
+      quantity: 2,
+    });
+
+    expect(() => subtotal(cart)).toThrow(RangeError);
+    expect(() => subtotal(cart)).toThrow('item "a"');
+    expect(() => total(cart)).toThrow(RangeError);
+  });
+
+  it("rejects a subtotal when the sum of items is unsafe", () => {
+    const cart = addItem(
+      addItem(createCart(), {
+        name: "a",
+        unitPrice: Number.MAX_SAFE_INTEGER,
+        quantity: 1,
+      }),
+      { name: "b", unitPrice: 2, quantity: 1 },
+    );
+
+    expect(() => subtotal(cart)).toThrow(RangeError);
+    expect(() => subtotal(cart)).toThrow("cart subtotal");
+    expect(() => total(cart)).toThrow(RangeError);
+  });
+
+  it("accepts a subtotal equal to the largest safe integer", () => {
+    const cart = addItem(
+      addItem(createCart(), {
+        name: "a",
+        unitPrice: Number.MAX_SAFE_INTEGER - 2,
+        quantity: 1,
+      }),
+      { name: "b", unitPrice: 2, quantity: 1 },
+    );
+
+    expect(subtotal(cart)).toBe(Number.MAX_SAFE_INTEGER);
+  });
+
   it("applies a percentage discount rounded to the nearest unit", () => {
     const cart = applyDiscount(addItem(createCart(), bread), 15);
 
