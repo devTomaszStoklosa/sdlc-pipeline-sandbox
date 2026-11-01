@@ -69,10 +69,22 @@ export function mostExpensiveItem(cart: Cart): CartItem | undefined {
 }
 
 export function subtotal(cart: Cart): number {
-  return cart.items.reduce(
-    (sum, item) => sum + item.unitPrice * item.quantity,
-    0,
-  );
+  let sum = 0;
+  for (const item of cart.items) {
+    const lineTotal = item.unitPrice * item.quantity;
+    if (!Number.isSafeInteger(lineTotal)) {
+      throw new RangeError(
+        `The amount of item "${item.name}" exceeds the largest safe integer.`,
+      );
+    }
+    sum += lineTotal;
+    if (!Number.isSafeInteger(sum)) {
+      throw new RangeError(
+        "The cart subtotal exceeds the largest safe integer.",
+      );
+    }
+  }
+  return sum;
 }
 
 export function total(cart: Cart): number {
