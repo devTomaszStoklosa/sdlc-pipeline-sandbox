@@ -68,6 +68,15 @@ export function mostExpensiveItem(cart: Cart): CartItem | undefined {
   );
 }
 
+// Returns the first item with the lowest unit price, or undefined when empty.
+export function cheapestItem(cart: Cart): CartItem | undefined {
+  return cart.items.reduce<CartItem | undefined>(
+    (best, item) =>
+      best === undefined || item.unitPrice < best.unitPrice ? item : best,
+    undefined,
+  );
+}
+
 export function subtotal(cart: Cart): number {
   let sum = 0;
   for (const item of cart.items) {
