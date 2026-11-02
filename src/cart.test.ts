@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   addItem,
   applyDiscount,
+  cheapestItem,
   createCart,
   itemCount,
   mostExpensiveItem,
@@ -108,6 +109,23 @@ describe("cart", () => {
 
   it("returns undefined for the most expensive item of an empty cart", () => {
     expect(mostExpensiveItem(createCart())).toBeUndefined();
+  });
+
+  it("finds the item with the lowest unit price", () => {
+    const cart = addItem(addItem(createCart(), bread), apple);
+
+    expect(cheapestItem(cart)).toBe(apple);
+  });
+
+  it("returns the first item when the lowest unit price is tied", () => {
+    const twin: CartItem = { ...apple, name: "twin" };
+    const cart = addItem(addItem(addItem(createCart(), bread), apple), twin);
+
+    expect(cheapestItem(cart)).toBe(apple);
+  });
+
+  it("returns undefined for the cheapest item of an empty cart", () => {
+    expect(cheapestItem(createCart())).toBeUndefined();
   });
 
   it("sums unit prices times quantities", () => {
