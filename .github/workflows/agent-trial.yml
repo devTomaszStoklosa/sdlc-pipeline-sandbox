@@ -11,9 +11,9 @@ permissions:
 
 jobs:
   trial:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/agent-trial.yml@c134a1e456390d75398a5cf2b70c8492abd8d617
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/agent-trial.yml@5b079dc392c16c0439ed82f3ca5ad654efaaf94a
     with:
-      pipeline-ref: c134a1e456390d75398a5cf2b70c8492abd8d617
+      pipeline-ref: 5b079dc392c16c0439ed82f3ca5ad654efaaf94a
     # The token exists only in the `agents` environment, but a reusable
     # workflow gets an environment secret only when the caller passes it by
     # name. Only the called job, which runs in that environment, can read it.

@@ -25,7 +25,7 @@ permissions:
 
 jobs:
   orchestrate:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@c134a1e456390d75398a5cf2b70c8492abd8d617
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/orchestrate.yml@5b079dc392c16c0439ed82f3ca5ad654efaaf94a
     # The most that the jobs of the called workflow may use; each job narrows
     # its own token further.
     permissions:
@@ -34,7 +34,7 @@ jobs:
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: c134a1e456390d75398a5cf2b70c8492abd8d617
+      pipeline-ref: 5b079dc392c16c0439ed82f3ca5ad654efaaf94a
       app-client-id: ${{ vars.APP_CLIENT_ID }}
       app-id: ${{ vars.APP_ID }}
     # The Claude Code token exists only in the `agents` environment, but a
