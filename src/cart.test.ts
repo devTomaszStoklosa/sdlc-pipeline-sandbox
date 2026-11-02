@@ -5,6 +5,7 @@ import {
   cheapestItem,
   createCart,
   itemCount,
+  lineTotal,
   mostExpensiveItem,
   quantityOf,
   removeItem,
@@ -126,6 +127,14 @@ describe("cart", () => {
 
   it("returns undefined for the cheapest item of an empty cart", () => {
     expect(cheapestItem(createCart())).toBeUndefined();
+  });
+
+  it("returns the unit price as the line total of a single piece", () => {
+    expect(lineTotal(bread)).toBe(799);
+  });
+
+  it("multiplies the unit price by the quantity for the line total", () => {
+    expect(lineTotal(apple)).toBe(600);
   });
 
   it("sums unit prices times quantities", () => {
