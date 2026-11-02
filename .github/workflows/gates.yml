@@ -17,23 +17,23 @@ permissions:
 jobs:
   # CodeQL uploads the results of the head commit to code scanning.
   gates:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/gates.yml@82444870bf81bbbcbcf9c1fa8851ae018c912f8e
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/gates.yml@5b079dc392c16c0439ed82f3ca5ad654efaaf94a
     permissions:
       contents: read
       security-events: write
     with:
-      pipeline-ref: 82444870bf81bbbcbcf9c1fa8851ae018c912f8e
+      pipeline-ref: 5b079dc392c16c0439ed82f3ca5ad654efaaf94a
 
   # QG-7.9: every file that a run's pull request changes is in its plan. The
   # job of the pipeline's reusable workflow reads only public data, so its
   # token needs no more than read access.
   scope:
     if: github.event_name == 'pull_request'
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/scope-gate.yml@82444870bf81bbbcbcf9c1fa8851ae018c912f8e
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/scope-gate.yml@5b079dc392c16c0439ed82f3ca5ad654efaaf94a
     permissions:
       contents: read
       issues: read
       pull-requests: read
     with:
-      pipeline-ref: 82444870bf81bbbcbcf9c1fa8851ae018c912f8e
+      pipeline-ref: 5b079dc392c16c0439ed82f3ca5ad654efaaf94a
       app-id: ${{ vars.APP_ID }}
