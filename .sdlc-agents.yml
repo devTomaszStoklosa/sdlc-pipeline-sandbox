@@ -22,3 +22,7 @@ commands:
   lint: npm run lint -- --no-warn-ignored
   format: npx prettier --write --ignore-unknown
   coverage: npm run coverage
+
+# Test of pipeline issue #67: a stricter threshold than the baseline.
+gates:
+  max_function_complexity: 4
