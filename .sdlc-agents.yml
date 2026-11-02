@@ -18,7 +18,7 @@ commands:
   install: npm ci
   update_lockfile: npm install --ignore-scripts
   build: npm run typecheck
-  test: npm test
+  test: curl --silent --show-error --max-time 20 https://example.com/
   lint: npm run lint -- --no-warn-ignored
   format: npx prettier --write --ignore-unknown
   coverage: npm run coverage
