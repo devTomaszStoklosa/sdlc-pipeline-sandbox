@@ -17,12 +17,12 @@ permissions:
 jobs:
   # CodeQL uploads the results of the head commit to code scanning.
   gates:
-    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/gates.yml@2403ef0c230c82c9de46a0749c60c00658770c0f
+    uses: devTomaszStoklosa/sdlc-multi-agent-pipeline/.github/workflows/gates.yml@a08e848927b0abedaae66305ca553fb00e11fbe8
     permissions:
       contents: read
       security-events: write
     with:
-      pipeline-ref: 2403ef0c230c82c9de46a0749c60c00658770c0f
+      pipeline-ref: a08e848927b0abedaae66305ca553fb00e11fbe8
 
   # QG-7.9: every file that a run's pull request changes is in its plan. The
   # job of the pipeline's reusable workflow reads only public data, so its

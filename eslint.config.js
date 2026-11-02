@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import process from "node:process";
 import prettier from "eslint-config-prettier";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
