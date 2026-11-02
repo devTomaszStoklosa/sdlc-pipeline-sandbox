@@ -19,6 +19,9 @@ commands:
   update_lockfile: npm install --ignore-scripts
   build: npm run typecheck
   test: npm test
-  lint: npm run lint -- --no-warn-ignored
+  lint: "false"
   format: npx prettier --write --ignore-unknown
   coverage: npm run coverage
+
+gates:
+  max_function_complexity: 1
