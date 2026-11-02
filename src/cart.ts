@@ -85,6 +85,11 @@ export function cheapestItem(cart: Cart): CartItem | undefined {
   );
 }
 
+// The value of a single cart line: unit price times quantity.
+export function lineTotal(item: CartItem): number {
+  return item.unitPrice * item.quantity;
+}
+
 export function subtotal(cart: Cart): number {
   let sum = 0;
   for (const item of cart.items) {
