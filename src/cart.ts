@@ -59,6 +59,14 @@ export function itemCount(cart: Cart): number {
   return cart.items.reduce((count, item) => count + item.quantity, 0);
 }
 
+// Sums the quantities of all items named exactly `name` (case-sensitive).
+export function quantityOf(cart: Cart, name: string): number {
+  return cart.items.reduce(
+    (count, item) => (item.name === name ? count + item.quantity : count),
+    0,
+  );
+}
+
 // Returns the first item with the highest unit price, or undefined when empty.
 export function mostExpensiveItem(cart: Cart): CartItem | undefined {
   return cart.items.reduce<CartItem | undefined>(

@@ -5,6 +5,7 @@ import {
   createCart,
   itemCount,
   mostExpensiveItem,
+  quantityOf,
   removeItem,
   subtotal,
   total,
@@ -67,6 +68,29 @@ describe("cart", () => {
     const cart = applyDiscount(addItem(createCart(), apple), 50);
 
     expect(itemCount(cart)).toBe(4);
+  });
+
+  it("returns 0 as the quantity of a name that is not in the cart", () => {
+    const cart = addItem(createCart(), apple);
+
+    expect(quantityOf(createCart(), "apple")).toBe(0);
+    expect(quantityOf(cart, "bread")).toBe(0);
+  });
+
+  it("returns the quantity of a single item, matching the case exactly", () => {
+    const cart = addItem(addItem(createCart(), apple), bread);
+
+    expect(quantityOf(cart, "apple")).toBe(4);
+    expect(quantityOf(cart, "Apple")).toBe(0);
+  });
+
+  it("sums the quantities of items with the same name", () => {
+    const cart = addItem(addItem(addItem(createCart(), apple), bread), {
+      ...apple,
+      quantity: 3,
+    });
+
+    expect(quantityOf(cart, "apple")).toBe(7);
   });
 
   it("finds the item with the highest unit price", () => {
