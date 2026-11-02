@@ -30,20 +30,24 @@ Skrypty:
 
 ## Bramki
 
-Workflow [gates.yml](.github/workflows/gates.yml) uruchamia każdą bramkę jako osobny job, a [codeql.yml](.github/workflows/codeql.yml) analizę CodeQL:
+Workflow [gates.yml](.github/workflows/gates.yml) wywołuje reusable workflow bramek pipeline'u, który bierze polecenia i progi z `.sdlc-agents.yml` commitu bazowego PR ([plan, rozdz. 3.6](https://github.com/devTomaszStoklosa/sdlc-multi-agent-pipeline/blob/main/plan.md#36-bramki-w-repozytorium-demo)). Każdy job jest wymaganym checkiem rulesetu `gates` pod nazwą `gates / <job>`:
 
 | Bramka | Job |
 |---|---|
-| Analiza statyczna i złożoność | `lint` |
-| Formatowanie | `format` |
-| Typy | `typecheck` |
-| Testy | `test` |
-| Pokrycie nie niższe niż w bazie PR | `coverage` |
-| Duplikacja | `duplication` |
+| Odczyt konfiguracji i progów | `config` |
+| Analiza statyczna i złożoność (`commands.lint`, próg z `SDLC_MAX_FUNCTION_COMPLEXITY`) | `lint` |
+| Formatowanie (`commands.format` na całym drzewie) | `format` |
+| Typy (`commands.build`) | `build` |
+| Testy (`commands.test`) | `test` |
+| Pokrycie nie niższe niż w bazie PR (`commands.coverage`) | `coverage` |
+| Duplikacja (jscpd pipeline'u) | `duplication` |
 | Sekrety | `secrets` |
 | Komunikaty commitów | `commitlint` |
-| Podatności w zależnościach (od `high`) | `dependency-review` |
-| SAST | CodeQL i reguła `code_scanning` rulesetu |
+| Podatności w zależnościach | `dependency-review` |
+| SAST: CodeQL na head i na bazie, porównanie alertów | `sast-head (…)`, `sast-base (…)`, `sast` |
+| Zakres | `scope / scope` |
+
+Ruleset wymaga też `config` i jobów CodeQL, bo job pominięty po niezaliczonej zależności ma stan `skipped`, który wymagany check uznaje za zaliczony. Reguła `code_scanning` rulesetu zostaje z progiem bazy organizacji.
 
 Żaden job nie ma uprawnień `checks: write` ani `statuses: write`.
 

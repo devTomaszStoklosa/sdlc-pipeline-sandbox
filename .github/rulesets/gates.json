@@ -25,15 +25,28 @@
         "strict_required_status_checks_policy": true,
         "do_not_enforce_on_create": false,
         "required_status_checks": [
-          { "context": "format", "integration_id": 15368 },
-          { "context": "lint", "integration_id": 15368 },
-          { "context": "typecheck", "integration_id": 15368 },
-          { "context": "test", "integration_id": 15368 },
-          { "context": "coverage", "integration_id": 15368 },
-          { "context": "duplication", "integration_id": 15368 },
-          { "context": "secrets", "integration_id": 15368 },
-          { "context": "commitlint", "integration_id": 15368 },
-          { "context": "dependency-review", "integration_id": 15368 }
+          { "context": "gates / config", "integration_id": 15368 },
+          { "context": "gates / format", "integration_id": 15368 },
+          { "context": "gates / lint", "integration_id": 15368 },
+          { "context": "gates / build", "integration_id": 15368 },
+          { "context": "gates / test", "integration_id": 15368 },
+          { "context": "gates / coverage", "integration_id": 15368 },
+          { "context": "gates / duplication", "integration_id": 15368 },
+          { "context": "gates / secrets", "integration_id": 15368 },
+          { "context": "gates / commitlint", "integration_id": 15368 },
+          { "context": "gates / dependency-review", "integration_id": 15368 },
+          { "context": "gates / sast-head (actions)", "integration_id": 15368 },
+          {
+            "context": "gates / sast-head (javascript-typescript)",
+            "integration_id": 15368
+          },
+          { "context": "gates / sast-base (actions)", "integration_id": 15368 },
+          {
+            "context": "gates / sast-base (javascript-typescript)",
+            "integration_id": 15368
+          },
+          { "context": "gates / sast", "integration_id": 15368 },
+          { "context": "scope / scope", "integration_id": 15368 }
         ]
       }
     },

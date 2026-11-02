@@ -1,21 +1,23 @@
 # Configuration of the multi-agent SDLC pipeline for this repository (spec 10).
-# A run uses the copy of this file from main at its start (FR-10.5). There is
-# no gates section: in the MVP the gates workflow does not read this file and
-# uses the organization baseline (pipeline plan 3.6). Labels and limits are the
-# defaults of the baseline.
+# A run uses the copy of this file from main at its start (FR-10.5), and the
+# gates workflow the file of the base commit of each pull request (pipeline
+# plan 3.6). Gate thresholds, labels and limits are the defaults of the
+# organization baseline.
 version: 1
 
-# The lint, test and coverage commands are the ones of the gates workflow, so
-# the agent and CI check a change the same way. The hooks append the path of
-# an edited file to the format and lint commands, so the linter also gets
-# `--no-warn-ignored` for files that ESLint does not check. After the
-# Developer writes a dependency manifest of an approved plan, a hook runs
-# update_lockfile, so the lockfile in the commit matches the manifest. It runs
-# no install scripts, because the session may name another package than the
-# plan does.
+# The gates workflow runs these commands, so the agent and CI check a change
+# the same way. It runs the format command on the whole tree and fails when
+# a file changes, and it reads coverage/coverage-summary.json after the
+# coverage command. The hooks append the path of an edited file to the
+# format and lint commands, so the linter also gets `--no-warn-ignored` for
+# files that ESLint does not check. After the Developer writes a dependency
+# manifest of an approved plan, a hook runs update_lockfile, so the lockfile
+# in the commit matches the manifest. It runs no install scripts, because the
+# session may name another package than the plan does.
 commands:
   install: npm ci
   update_lockfile: npm install --ignore-scripts
+  build: npm run typecheck
   test: npm test
   lint: npm run lint -- --no-warn-ignored
   format: npx prettier --write --ignore-unknown

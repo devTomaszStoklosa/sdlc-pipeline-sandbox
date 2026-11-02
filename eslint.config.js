@@ -14,9 +14,14 @@ export default defineConfig(
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    // Size and complexity thresholds for SRP and KISS (spec 7.3, QG-7.7).
+    // Size and complexity thresholds for SRP and KISS (spec 7.3, QG-7.7). The
+    // gates workflow and the agent's hooks pass the complexity threshold of
+    // .sdlc-agents.yml; without it, the threshold of the organization baseline.
     rules: {
-      complexity: ["error", 10],
+      complexity: [
+        "error",
+        Number(process.env.SDLC_MAX_FUNCTION_COMPLEXITY ?? 10),
+      ],
       "max-depth": ["error", 4],
       "max-params": ["error", 4],
       "max-lines": [
